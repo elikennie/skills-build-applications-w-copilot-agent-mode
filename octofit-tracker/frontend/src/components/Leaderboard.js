@@ -9,11 +9,9 @@ function Leaderboard() {
     const fetchLeaderboard = async () => {
       try {
         setLoading(true);
-        const codespaceUrl = process.env.REACT_APP_CODESPACE_NAME 
-          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev`
-          : 'http://localhost:8000';
-        
-        const apiUrl = `${codespaceUrl}/api/leaderboard/`;
+        const apiUrl = process.env.REACT_APP_CODESPACE_NAME 
+          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+          : 'http://localhost:8000/api/leaderboard/';
         console.log('Fetching Leaderboard from:', apiUrl);
         
         const response = await fetch(apiUrl);

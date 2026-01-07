@@ -9,11 +9,9 @@ function Teams() {
     const fetchTeams = async () => {
       try {
         setLoading(true);
-        const codespaceUrl = process.env.REACT_APP_CODESPACE_NAME 
-          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev`
-          : 'http://localhost:8000';
-        
-        const apiUrl = `${codespaceUrl}/api/teams/`;
+        const apiUrl = process.env.REACT_APP_CODESPACE_NAME 
+          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+          : 'http://localhost:8000/api/teams/';
         console.log('Fetching Teams from:', apiUrl);
         
         const response = await fetch(apiUrl);

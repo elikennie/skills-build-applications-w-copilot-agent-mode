@@ -9,11 +9,9 @@ function Activities() {
     const fetchActivities = async () => {
       try {
         setLoading(true);
-        const codespaceUrl = process.env.REACT_APP_CODESPACE_NAME 
-          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev`
-          : 'http://localhost:8000';
-        
-        const apiUrl = `${codespaceUrl}/api/activities/`;
+        const apiUrl = process.env.REACT_APP_CODESPACE_NAME 
+          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+          : 'http://localhost:8000/api/activities/';
         console.log('Fetching Activities from:', apiUrl);
         
         const response = await fetch(apiUrl);

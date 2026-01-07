@@ -9,11 +9,9 @@ function Workouts() {
     const fetchWorkouts = async () => {
       try {
         setLoading(true);
-        const codespaceUrl = process.env.REACT_APP_CODESPACE_NAME 
-          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev`
-          : 'http://localhost:8000';
-        
-        const apiUrl = `${codespaceUrl}/api/workouts/`;
+        const apiUrl = process.env.REACT_APP_CODESPACE_NAME 
+          ? `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+          : 'http://localhost:8000/api/workouts/';
         console.log('Fetching Workouts from:', apiUrl);
         
         const response = await fetch(apiUrl);
