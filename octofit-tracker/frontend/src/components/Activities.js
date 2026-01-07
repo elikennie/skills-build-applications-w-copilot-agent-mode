@@ -37,35 +37,66 @@ function Activities() {
     fetchActivities();
   }, []);
 
-  if (loading) return <div className="container mt-5"><p>Loading activities...</p></div>;
-  if (error) return <div className="container mt-5"><p className="text-danger">{error}</p></div>;
+  if (loading) {
+    return (
+      <div className="container mt-5">
+        <div className="loading-spinner">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p>Loading activities...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger" role="alert">
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-5">
-      <h2>Activities</h2>
+      <h2 className="section-title">📋 Activities</h2>
+      
       {activities.length === 0 ? (
-        <p>No activities found.</p>
+        <div className="empty-state">
+          <div className="empty-state-icon">🏃</div>
+          <h4>No Activities Found</h4>
+          <p className="text-muted">Start tracking your fitness activities today!</p>
+        </div>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Calories Burned</th>
-            </tr>
-          </thead>
-          <tbody>
-            {activities.map((activity) => (
-              <tr key={activity.id}>
-                <td>{activity.id}</td>
-                <td>{activity.name}</td>
-                <td>{activity.description}</td>
-                <td>{activity.calories_burned}</td>
+        <div className="table-responsive">
+          <table className="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Activity Name</th>
+                <th scope="col">Description</th>
+                <th scope="col" className="text-center">Calories Burned</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {activities.map((activity, index) => (
+                <tr key={activity.id}>
+                  <th scope="row">{index + 1}</th>
+                  <td>
+                    <span className="badge badge-primary">{activity.name}</span>
+                  </td>
+                  <td>{activity.description}</td>
+                  <td className="text-center">
+                    <span className="badge bg-success">{activity.calories_burned}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

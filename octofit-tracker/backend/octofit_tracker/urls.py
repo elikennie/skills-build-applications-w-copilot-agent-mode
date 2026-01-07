@@ -14,24 +14,23 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-import os
 from django.contrib import admin
-from django.urls import path
-from django.http import JsonResponse
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    api_root, UserViewSet, TeamViewSet, ActivityViewSet,
+    WorkoutViewSet, LeaderboardViewSet
+)
 
-
-def api_root(request):
-    codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
-    api_url = f"https://{codespace_name}-8000.app.github.dev/api/"
-    return JsonResponse({"api_root": api_url})
-
-def activities_endpoint(request):
-    codespace_name = os.environ.get('CODESPACE_NAME', 'localhost')
-    url = f"https://{codespace_name}-8000.app.github.dev/api/activities/"
-    return JsonResponse({"activities_url": url})
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
+router.register(r'teams', TeamViewSet, basename='team')
+router.register(r'activities', ActivityViewSet, basename='activity')
+router.register(r'workouts', WorkoutViewSet, basename='workout')
+router.register(r'leaderboard', LeaderboardViewSet, basename='leaderboard')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', api_root),
-    path('api/activities/', activities_endpoint),
+    path('api/', api_root, name='api-root'),
+    path('api/', include(router.urls)),
 ]

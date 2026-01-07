@@ -37,35 +37,81 @@ function Leaderboard() {
     fetchLeaderboard();
   }, []);
 
-  if (loading) return <div className="container mt-5"><p>Loading leaderboard...</p></div>;
-  if (error) return <div className="container mt-5"><p className="text-danger">{error}</p></div>;
+  const getMedalEmoji = (rank) => {
+    if (rank === 1) return '🥇';
+    if (rank === 2) return '🥈';
+    if (rank === 3) return '🥉';
+    return '⭐';
+  };
+
+  if (loading) {
+    return (
+      <div className="container mt-5">
+        <div className="loading-spinner">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p>Loading leaderboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger" role="alert">
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-5">
-      <h2>Leaderboard</h2>
+      <h2 className="section-title">🏆 Leaderboard</h2>
+      
       {leaderboard.length === 0 ? (
-        <p>No leaderboard data available.</p>
+        <div className="empty-state">
+          <div className="empty-state-icon">🎯</div>
+          <h4>No Leaderboard Data Available</h4>
+          <p className="text-muted">Start competing to appear on the leaderboard!</p>
+        </div>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>User</th>
-              <th>Points</th>
-              <th>Workouts</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboard.map((entry, index) => (
-              <tr key={entry.id}>
-                <td>{index + 1}</td>
-                <td>{entry.user_name || entry.username}</td>
-                <td>{entry.points}</td>
-                <td>{entry.workout_count}</td>
+        <div className="table-responsive">
+          <table className="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th scope="col" className="text-center">Rank</th>
+                <th scope="col">User</th>
+                <th scope="col" className="text-center">Points</th>
+                <th scope="col" className="text-center">Workouts</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {leaderboard.map((entry, index) => {
+                const rank = index + 1;
+                const medal = getMedalEmoji(rank);
+                return (
+                  <tr key={entry.id}>
+                    <td className="text-center">
+                      <span className="badge bg-info">{medal} #{rank}</span>
+                    </td>
+                    <td>
+                      <strong>{entry.user_name || entry.username}</strong>
+                    </td>
+                    <td className="text-center">
+                      <span className="badge bg-warning text-dark">{entry.points} pts</span>
+                    </td>
+                    <td className="text-center">
+                      <span className="badge bg-success">{entry.workout_count}</span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

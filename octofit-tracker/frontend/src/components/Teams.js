@@ -37,35 +37,59 @@ function Teams() {
     fetchTeams();
   }, []);
 
-  if (loading) return <div className="container mt-5"><p>Loading teams...</p></div>;
-  if (error) return <div className="container mt-5"><p className="text-danger">{error}</p></div>;
+  if (loading) {
+    return (
+      <div className="container mt-5">
+        <div className="loading-spinner">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p>Loading teams...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger" role="alert">
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mt-5">
-      <h2>Teams</h2>
+      <h2 className="section-title">👥 Teams</h2>
+      
       {teams.length === 0 ? (
-        <p>No teams found.</p>
+        <div className="empty-state">
+          <div className="empty-state-icon">🤝</div>
+          <h4>No Teams Found</h4>
+          <p className="text-muted">Create a team and invite your friends to compete together!</p>
+          <button className="btn btn-primary mt-3">Create New Team</button>
+        </div>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Members</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div>
+          <div className="data-grid">
             {teams.map((team) => (
-              <tr key={team.id}>
-                <td>{team.id}</td>
-                <td>{team.name}</td>
-                <td>{team.description}</td>
-                <td>{team.member_count || 0}</td>
-              </tr>
+              <div key={team.id} className="card">
+                <div className="card-header">
+                  <h5 className="mb-0">{team.name}</h5>
+                </div>
+                <div className="card-body">
+                  <p className="card-text">{team.description}</p>
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <span className="badge bg-info">{team.member_count || 0} Members</span>
+                    <button className="btn btn-sm btn-outline-primary">View Team</button>
+                  </div>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       )}
     </div>
   );
